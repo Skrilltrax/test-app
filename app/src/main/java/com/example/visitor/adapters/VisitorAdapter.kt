@@ -28,7 +28,6 @@ class VisitorAdapter(val visitorList: ArrayList<Profile>): RecyclerView.Adapter<
 
     override fun getItemCount(): Int {
         Log.d("Size","Here")
-//        return 10
         return visitorList.size
     }
 
@@ -37,11 +36,16 @@ class VisitorAdapter(val visitorList: ArrayList<Profile>): RecyclerView.Adapter<
 
         var profileImage: CircleImageView = itemView.findViewById(R.id.profile_image)
         private var profileName: TextView = itemView.findViewById(R.id.profile_name)
+        private var profileVisits: TextView = itemView.findViewById(R.id.profile_visits)
 
         fun setValues(profile: Profile) {
 
             profileName.text = profile.name
-
+            if (profile.visitCount > 1) {
+                profileVisits.text = "${profile.visitCount } visits"
+            } else {
+                profileVisits.text = "${profile.visitCount } visit"
+            }
             Glide.with(itemView)
                 .load(profile.photoUrl)
                 .placeholder(R.drawable.ic_account_circle_black_24dp)

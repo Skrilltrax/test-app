@@ -43,10 +43,14 @@ class MainActivity : AppCompatActivity() {
         floatingActionButton = findViewById(R.id.fab)
     }
 
+    fun showFab() {
+        floatingActionButton.show(true)
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
         if (supportFragmentManager.backStackEntryCount == 0) {
-            floatingActionButton.show(true)
+            showFab()
         }
     }
 

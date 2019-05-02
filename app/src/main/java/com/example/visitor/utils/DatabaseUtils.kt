@@ -40,9 +40,9 @@ object DatabaseUtils {
         })
     }
 
-    fun getProfileFromKey(key: String, callbacks: Callbacks): Profile? {
+    fun getProfileFromKey(key: String, callbacks: Callbacks) {
 
-        var profile: Profile? = null
+        var profile: Profile?
         visitorsRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
             }
@@ -55,7 +55,6 @@ object DatabaseUtils {
                 }
             }
         })
-        return profile
     }
 
     fun updateDB(profile: Profile, userType: Int, key: String = "") {
@@ -103,9 +102,9 @@ object DatabaseUtils {
                 for (singleSnapshot in dataSnapshot.children) {
                     userProfile = singleSnapshot.getValue<Profile>(Profile::class.java)!!
                     profileList.add(userProfile)
-                    profileListCallback.getProfileList(profileList)
-                    return
                 }
+                profileListCallback.getProfileList(profileList)
+                return
             }
         })
         profileListCallback.getProfileList(profileList)

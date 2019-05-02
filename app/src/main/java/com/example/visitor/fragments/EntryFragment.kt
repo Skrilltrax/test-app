@@ -121,7 +121,7 @@ class EntryFragment : Fragment(), Callbacks{
 
                     val profile = Profile(profileName.text.toString(),profileNumber.text.toString(),downloadUri.toString(),1)
                     DatabaseUtils.updateDB(profile, NON_VERIFIED_USER)
-                    Snackbar.make(this@EntryFragment.view!!,"There is some error",Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(this@EntryFragment.view!!,"There is some error",Snackbar.LENGTH_LONG).show()
                     this@EntryFragment.activity?.supportFragmentManager?.popBackStack()
 
                     if (e is FirebaseAuthInvalidCredentialsException) {
@@ -142,7 +142,7 @@ class EntryFragment : Fragment(), Callbacks{
                 override fun onCodeAutoRetrievalTimeOut(p0: String?) {
                     val profile = Profile(profileName.text.toString(),profileNumber.text.toString(),downloadUri.toString(),1)
                     DatabaseUtils.updateDB(profile, NON_VERIFIED_USER)
-                    Snackbar.make(this@EntryFragment.view!!,"There is some error",Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(this@EntryFragment.view!!,"There is some error",Snackbar.LENGTH_LONG).show()
                     this@EntryFragment.activity?.supportFragmentManager?.popBackStack()
                 }
             }
@@ -152,8 +152,6 @@ class EntryFragment : Fragment(), Callbacks{
         }
 
         submit.setOnClickListener {
-
-            DatabaseUtils.searchUser(profileNumber.text.toString(),callbacks)
             credential = PhoneAuthProvider.getCredential(storedVerificationId, otp.text.toString())
             signInWithPhoneAuthCredential(this@EntryFragment.activity as AppCompatActivity, credential)
         }
@@ -165,19 +163,19 @@ class EntryFragment : Fragment(), Callbacks{
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
+
                     Log.d("AuthUtils", "signInWithCredential:success")
-                    Snackbar.make(this@EntryFragment.view!!,"Entry stored",Snackbar.LENGTH_SHORT).show()
-                    this@EntryFragment.activity?.supportFragmentManager?.popBackStack()
+                    DatabaseUtils.searchUser(profileNumber.text.toString(),callbacks)
                 } else {
                     // Sign in failed, display a message and update the UI
                     val profile = Profile(profileName.text.toString(),profileNumber.text.toString(),downloadUri.toString(),1)
                     DatabaseUtils.updateDB(profile, NON_VERIFIED_USER)
-                    Snackbar.make(this@EntryFragment.view!!,"There is some error",Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(this@EntryFragment.view!!,"There is some error",Snackbar.LENGTH_LONG).show()
                     this@EntryFragment.activity?.supportFragmentManager?.popBackStack()
                     Log.w("AuthUtils", "signInWithCredential:failure", task.exception)
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
                         // The verification code entered was invalid
-                        Snackbar.make(this@EntryFragment.view!!,"Invalid verification code",Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(this@EntryFragment.view!!,"Invalid verification code",Snackbar.LENGTH_LONG).show()
                         this@EntryFragment.activity?.supportFragmentManager?.popBackStack()
                     } else {
 
@@ -214,7 +212,9 @@ class EntryFragment : Fragment(), Callbacks{
 
     override fun getProfile(profile: Profile, key: String) {
         profile.visitCount++
+        Snackbar.make(this@EntryFragment.view!!,"Welcome back for ${profile.visitCount} visit",Snackbar.LENGTH_LONG).show()
         DatabaseUtils.updateDB(profile, VERIFIED_USER_FOUND,key)
+        this@EntryFragment.activity?.supportFragmentManager?.popBackStack()
     }
 
     @SuppressLint("CheckResult")
